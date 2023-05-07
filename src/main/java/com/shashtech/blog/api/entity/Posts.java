@@ -50,7 +50,7 @@ public class Posts {
 	@Builder.Default
 	private User user = new User();
 	
-	@OneToMany(mappedBy="post",cascade=CascadeType.REMOVE,fetch=FetchType.LAZY)
+	@OneToMany(mappedBy="post",cascade=CascadeType.REMOVE,fetch=FetchType.EAGER)
 	@Builder.Default
 	private List<Comments> commentList= new ArrayList<>();
 }

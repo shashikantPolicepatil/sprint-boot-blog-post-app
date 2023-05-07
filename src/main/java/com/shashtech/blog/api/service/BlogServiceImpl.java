@@ -9,8 +9,11 @@ import javax.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.shashtech.blog.api.dto.CommentDTO;
 import com.shashtech.blog.api.dto.PostDTO;
+import com.shashtech.blog.api.entity.Comments;
 import com.shashtech.blog.api.entity.Posts;
+import com.shashtech.blog.api.repository.CommentRepository;
 import com.shashtech.blog.api.repository.PostRepository;
 import com.shashtech.blog.api.util.AppConstants;
 import com.shashtech.blog.api.util.CommonUtil;
@@ -20,6 +23,9 @@ public class BlogServiceImpl {
 
 	@Autowired
 	private PostRepository postRepository;
+	
+	@Autowired
+	private CommentRepository commentRepository;
 
 	public boolean addBlog(PostDTO postDTO) {
 		try {
@@ -68,6 +74,30 @@ public class BlogServiceImpl {
 			List<Posts> findByUserId = postRepository.findByUserId(userFromContext.getId());
 			return CommonUtil.convertPostEntityToPostDTO(findByUserId);
 		}
+	}
+
+	public boolean addComment(CommentDTO commentDTO) {
+		Optional<Posts> post = postRepository.findById(commentDTO.getPostId());
+		if(post.isPresent()) {
+			Comments newComment = Comments.builder().content(commentDTO.getContent())
+					.email(commentDTO.getEmail())
+					.name(commentDTO.getName())
+					.creatdOn(LocalDate.now()).build();
+			newComment.setPost(post.get());
+			commentRepository.save(newComment);
+			return true;
+		}
+		return false;
+	}
+
+	public boolean removeComment(Integer commentId) {
+		commentRepository.deleteById(commentId);
+		return true;
+	}
+
+	public boolean removeBlog(Integer postId) {
+		postRepository.deleteById(postId);
+		return false;
 	}
 
 }

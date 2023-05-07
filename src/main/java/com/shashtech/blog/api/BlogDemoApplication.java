@@ -11,6 +11,7 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 
 import com.shashtech.blog.api.entity.ERole;
 import com.shashtech.blog.api.entity.Role;
@@ -19,6 +20,7 @@ import com.shashtech.blog.api.repository.RoleRepository;
 import com.shashtech.blog.api.repository.UserRepository;
 
 @SpringBootApplication
+@RefreshScope
 public class BlogDemoApplication {
 
 	@Autowired

@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -74,5 +75,16 @@ public class BlogResource {
 		detail.put("posts", allPosts);
 		return new ResponseEntity<>(new MessageResponse(AppConstants.RECORD_FOUND
 				,HttpStatus.OK.value(),AppConstants.SUCCESS_STATUS,detail),HttpStatus.OK);
+	}
+	
+	@DeleteMapping("/blog/{postId}")
+	public ResponseEntity<?> deletePost(@PathVariable Integer postId) {
+		boolean isDeleted = blogServiceImpl.removeBlog(postId);
+		if(isDeleted) {
+			return new ResponseEntity<>(new MessageResponse(AppConstants.POST_REMOVE_SUCCESS
+					,HttpStatus.OK.value(),AppConstants.SUCCESS_STATUS,null),HttpStatus.OK);
+		}
+		return new ResponseEntity<>(new MessageResponse(AppConstants.POST_REMOVE_FAILURE
+				,HttpStatus.INTERNAL_SERVER_ERROR.value(),AppConstants.ERROR_STATUS,null),HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 }
